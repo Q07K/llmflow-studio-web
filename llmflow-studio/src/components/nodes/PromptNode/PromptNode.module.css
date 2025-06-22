@@ -5,6 +5,7 @@
   border-left: 1px solid #121212;
   align-self: stretch;
 }
+
 .horizontal-line {
   border-top: 1px solid #121212;
   width: 100%;
@@ -91,6 +92,7 @@
   transition: transform 0.3s ease;
   z-index: -1;
 }
+
 .node-handle:hover {
   left: calc(100% + -5px);
   width: 6px;

@@ -1,3 +1,3 @@
-import DisplayNode from './DisplayNode.vue';
+import DisplayNode from './DisplayNode.vue'
 
-export default DisplayNode;
+export default DisplayNode

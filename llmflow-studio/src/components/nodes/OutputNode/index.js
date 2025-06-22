@@ -1,3 +1,3 @@
-import OutputNode from './OutputNode.vue';
+import OutputNode from './OutputNode.vue'
 
-export default OutputNode;
+export default OutputNode

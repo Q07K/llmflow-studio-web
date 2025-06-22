@@ -1,3 +1,3 @@
-import PromptNode from './PromptNode.vue';
+import PromptNode from './PromptNode.vue'
 
-export default PromptNode;
+export default PromptNode
