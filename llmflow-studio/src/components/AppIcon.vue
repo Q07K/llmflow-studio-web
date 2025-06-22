@@ -12,8 +12,9 @@
   import { computed, defineProps } from 'vue'
   import SunIcon from '@/assets/icons/sun.svg'
   import MoonIcon from '@/assets/icons/moon.svg'
-  import promptNodeIcon from '@/assets/icons/nodes/promptNodeIcon.svg'
   import nodeExpandedButtonIcon from '@/assets/icons/nodes/nodeExpandedButtonIcon.svg'
+  import promptNodeIcon from '@/assets/icons/nodes/promptNodeIcon.svg'
+  import outputNodeIcon from '@/assets/icons/nodes/outputNodeIcon.svg'
   // 필요한 SVG 아이콘을 위에 import해서 추가하세요
 
   const props = defineProps({
@@ -25,8 +26,10 @@
   const icons = {
     sun: SunIcon,
     moon: MoonIcon,
+    expandedButton: nodeExpandedButtonIcon,
     promptNode: promptNodeIcon,
-    expandedButton: nodeExpandedButtonIcon
+    outputNode: outputNodeIcon
+
     // '다른아이콘이름': OtherIcon
   }
 
