@@ -1,6 +1,11 @@
 <template>
   <div class="vue-flow-container">
-    <VueFlow :nodes="nodes" :edges="edges" :nodeTypes="nodeTypes">
+    <VueFlow
+      :nodes="nodes"
+      :edges="edges"
+      :nodeTypes="nodeTypes"
+      @connect="onConnect"
+    >
       <AppBackground :dark="dark" />
       <Controls position="top-left">
         <ControlButton title="Toggle Dark Mode" @click="toggleDarkMode">
@@ -24,10 +29,24 @@
   import '@/assets/scss/ControlsFix.css'
 
   const dark = ref(false)
-  const { nodes, edges, setNodes, setEdges } = useVueFlow()
+  const { nodes, edges, setNodes, setEdges, addEdges } = useVueFlow()
 
   function toggleDarkMode() {
     dark.value = !dark.value
+  }
+
+  function onConnect(params) {
+    // params: { source, sourceHandle, target, targetHandle }
+    addEdges([
+      {
+        id: `e${params.source}-${params.target}`,
+        source: params.source,
+        target: params.target,
+        sourceHandle: params.sourceHandle,
+        targetHandle: params.targetHandle,
+        type: 'default'
+      }
+    ])
   }
 
   // 다크 모드 상태에 따라 body class 토글
