@@ -2,13 +2,11 @@
 
 import DisplayNode from '@/components/nodes/DisplayNode'
 import PromptNode from '@/components/nodes/PromptNode'
-// import OutputNode from '@/components/nodes/OutputNode'
 
 // 노드 타입 설정
 export const nodeTypes = {
   display: DisplayNode,
   prompt_node: PromptNode,
-  // output_node: OutputNode,
 }
 
 // 초기 노드 설정
