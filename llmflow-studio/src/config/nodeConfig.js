@@ -15,18 +15,12 @@ export const initialNodes = [
     id: '1',
     position: { x: 300, y: 400 },
     type: 'prompt_node',
-    data: {
-      modelValue: { role: 'user', context: 'Node 1의 초기 텍스트' }
-    },
     events: {}
   },
   {
-    id: '2',
-    position: { x: 600, y: 400 },
-    type: 'display_node',
-    data: {
-      modelValue: { role: 'system', context: 'Output Node의 초기 텍스트' }
-    },
+    id: '3',
+    position: { x: 300, y: 500 },
+    type: 'prompt_node',
     events: {}
   }
 ]
