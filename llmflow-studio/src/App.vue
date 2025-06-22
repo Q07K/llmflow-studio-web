@@ -36,7 +36,15 @@
   }
 
   function onConnect(params) {
-    // params: { source, sourceHandle, target, targetHandle }
+    const sourceNode = nodes.value.find((n) => n.id === params.source)
+    const targetNode = nodes.value.find((n) => n.id === params.target)
+
+    // 방향이 같으면 연결 막기
+    if (sourceNode?.direction === targetNode?.direction) {
+      alert('같은 방향 노드끼리는 연결할 수 없습니다.')
+      return
+    }
+
     addEdges([
       {
         id: `e${params.source}-${params.target}`,
