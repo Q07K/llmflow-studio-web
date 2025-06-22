@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["llmflow-studio/src/*"]
+    },
+    "target": "es2015",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment"
+  },
+  "include": ["llmflow-studio/src/**/*"],
+  "exclude": ["node_modules"]
+}
