@@ -60,18 +60,16 @@
   }
 
   function onNodeClick() {
-    // 노드 클릭 시 강제 리렌더링 제거
-    console.log('Node clicked:', nodes.value)
+    // 노드 클릭 시 강제 리렌더링
+    nodes.value = [...nodes.value]
   }
 
   function onNodesChange(changes) {
-    // 노드 변경 시 업데이트 최적화
+    // 노드 변경 시 강제 리렌더링
     console.log('Nodes changed:', changes)
-    changes.forEach(change => {
-      const index = nodes.value.findIndex(node => node.id === change.id)
-      if (index !== -1) {
-        Object.assign(nodes.value[index], change)
-      }
+    // 다음 틱에서 강제 업데이트
+    nextTick(() => {
+      nodes.value = [...nodes.value]
     })
   }
 
