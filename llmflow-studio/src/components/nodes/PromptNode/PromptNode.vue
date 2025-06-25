@@ -148,12 +148,13 @@
 
   // 모델 값이 외부에서 변경되었을 때 로컬 상태 업데이트
   watch(
-    () => getModelValue(),
-    (newValue) => {
+    [() => props.data?.modelValue, () => props.modelValue],
+    () => {
+      const newValue = getModelValue()
       currentRole.value = newValue.role
       inputText.value = newValue.context
     },
-    { deep: true }
+    { immediate: true }
   )
 
   const toggleExpansion = () => {
