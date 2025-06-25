@@ -186,23 +186,18 @@
 
     // 부모 컴포넌트에 알림
     const updatedValue = { role: option, context: inputText.value }
-    console.log('PromptNode selectOption:', updatedValue)
 
     // 이벤트 핸들러 가져오기
     const eventHandlers = getEventHandlers()
-    console.log('Event handlers:', eventHandlers)
 
     // data에 정의된 이벤트 핸들러가 있으면 사용
     if (eventHandlers.onUpdateModelValue) {
-      console.log('Calling onUpdateModelValue')
       eventHandlers.onUpdateModelValue(updatedValue)
     }
 
     // VueFlow 노드 ID 사용 (data.id 우선, 없으면 props.id)
     const nodeId = props.data?.id || props.id
-    console.log('Node ID:', nodeId)
     if (nodeId && eventHandlers.onNodeDataChanged) {
-      console.log('Calling onNodeDataChanged')
       eventHandlers.onNodeDataChanged({ id: nodeId, data: updatedValue })
     }
 
