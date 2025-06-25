@@ -64,7 +64,6 @@
 }
 
 .node-subtitle {
-  background-color: #EEEEEE;
   color: #121212;
   padding: 2px 8px;
   border-radius: 4px;
@@ -80,23 +79,23 @@
 }
 
 .node-handle {
-  top: '50%';
-  transform: 'translateY(-50%)';
-  left: calc(100% + -3px);
+  top: 50%;
+  transform: translateY(-50%);
+  left: -3px;
   height: 14px;
   width: 2px;
   min-width: 2px;
   border: 1px solid #121212;
   background-color: #FDFDFD;
-  border-radius: 0px 2px 2px 0px;
+  border-radius: 2px 0px 0px 2px;
   transition: transform 0.3s ease;
   z-index: -1;
 }
 
 .node-handle:hover {
-  left: calc(100% + -5px);
+  left: -5px;
   width: 6px;
-  border-radius: 0px 4px 4px 0px;
+  border-radius: 4px 0px 0px 4px;
 }
 
 .dropdown-icon {
@@ -123,9 +122,8 @@
   font-size: 10px;
   min-width: 100%;
   width: min-content;
-  border: 1px solid #EEEEEE;
-  border-radius: 12px;
-  background-color: #EEEEEE;
+  border: 1px solid #121212;
+  border-radius: 8px;
   outline: 4px;
   padding: 10px;
   height: auto;
