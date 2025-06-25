@@ -30,6 +30,7 @@
   import '@/assets/scss/App.css'
   import '@/assets/scss/ControlsFix.css'
 
+  const { applyNodeChanges } = useVueFlow()
   const dark = ref(false)
   const { nodes, edges, setNodes, setEdges, addEdges } = useVueFlow()
 
@@ -66,11 +67,7 @@
 
   function onNodesChange(changes) {
     // 노드 변경 시 강제 리렌더링
-    console.log('Nodes changed:', changes)
-    // 다음 틱에서 강제 업데이트
-    nextTick(() => {
-      nodes.value = [...nodes.value]
-    })
+    nodes.value = applyNodeChanges(changes)
   }
 
   // 다크 모드 상태에 따라 body class 토글
