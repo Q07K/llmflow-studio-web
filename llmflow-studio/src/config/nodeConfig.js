@@ -17,13 +17,19 @@ export const initialNodes = [
     id: '1',
     position: { x: 300, y: 400 },
     type: 'prompt_node',
+    data: {
+      modelValue: { role: 'system', context: 'Hello from PromptNode!' }
+    },
     events: {},
     direction: 'right'
   },
   {
     id: '3',
-    position: { x: 300, y: 500 },
+    position: { x: 800, y: 400 },
     type: 'output_node',
+    data: {
+      modelValue: { context: '{"waiting": "for prompt data"}' }
+    },
     events: {},
     direction: 'left'
   }
@@ -31,5 +37,5 @@ export const initialNodes = [
 
 // 초기 엣지 설정
 export const initialEdges = [
-  { id: 'e1-2', source: '1', target: '2', type: 'default' }
+  { id: 'e1-3', source: '1', target: '3', type: 'default' }
 ]
