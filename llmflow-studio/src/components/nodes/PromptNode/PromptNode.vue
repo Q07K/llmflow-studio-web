@@ -96,35 +96,59 @@
   import { Handle } from '@vue-flow/core'
 
   const props = defineProps({
-    modelValue: {
+    // VueFlow에서 전달되는 data 객체
+    data: {
       type: Object,
-      default: () => ({ role: 'system', context: '' })
+      default: () => ({})
     },
+    // VueFlow 노드의 기본 props들
     id: {
       type: String,
       default: ''
+    },
+    // 직접 전달되는 modelValue (fallback용)
+    modelValue: {
+      type: Object,
+      default: () => ({ role: 'system', context: '' })
     }
   })
+
+  // data.modelValue가 있으면 우선 사용하고, 없으면 props.modelValue 사용
+  const getModelValue = () => {
+    return (
+      props.data?.modelValue ||
+      props.modelValue || { role: 'system', context: '' }
+    )
+  }
+
+  // 이벤트 핸들러를 data에서 가져오기
+  const getEventHandlers = () => {
+    return {
+      onUpdateModelValue: props.data?.onUpdateModelValue,
+      onNodeDataChanged: props.data?.onNodeDataChanged
+    }
+  }
 
   const emit = defineEmits(['update:modelValue', 'node-data-changed'])
 
   const isExpanded = ref(false)
   const isDropdownOpen = ref(false)
-  const inputText = ref(props.modelValue.context)
-  const currentRole = ref(props.modelValue.role)
+  const inputText = ref(getModelValue().context)
+  const currentRole = ref(getModelValue().role)
   const options = ref(['system', 'assistant', 'user'])
   const dropdownMenu = ref(null)
   const dropdownHeight = ref(0)
 
   // 초기값 설정
   onMounted(() => {
-    currentRole.value = props.modelValue.role
-    inputText.value = props.modelValue.context
+    const modelValue = getModelValue()
+    currentRole.value = modelValue.role
+    inputText.value = modelValue.context
   })
 
   // 모델 값이 외부에서 변경되었을 때 로컬 상태 업데이트
   watch(
-    () => props.modelValue,
+    () => getModelValue(),
     (newValue) => {
       currentRole.value = newValue.role
       inputText.value = newValue.context
@@ -162,10 +186,30 @@
 
     // 부모 컴포넌트에 알림
     const updatedValue = { role: option, context: inputText.value }
-    emit('update:modelValue', updatedValue)
+    console.log('PromptNode selectOption:', updatedValue)
 
-    if (props.id) {
-      emit('node-data-changed', { id: props.id, data: updatedValue })
+    // 이벤트 핸들러 가져오기
+    const eventHandlers = getEventHandlers()
+    console.log('Event handlers:', eventHandlers)
+
+    // data에 정의된 이벤트 핸들러가 있으면 사용
+    if (eventHandlers.onUpdateModelValue) {
+      console.log('Calling onUpdateModelValue')
+      eventHandlers.onUpdateModelValue(updatedValue)
+    }
+
+    // VueFlow 노드 ID 사용 (data.id 우선, 없으면 props.id)
+    const nodeId = props.data?.id || props.id
+    console.log('Node ID:', nodeId)
+    if (nodeId && eventHandlers.onNodeDataChanged) {
+      console.log('Calling onNodeDataChanged')
+      eventHandlers.onNodeDataChanged({ id: nodeId, data: updatedValue })
+    }
+
+    // fallback으로 emit도 실행
+    emit('update:modelValue', updatedValue)
+    if (nodeId) {
+      emit('node-data-changed', { id: nodeId, data: updatedValue })
     }
 
     isDropdownOpen.value = false
@@ -175,10 +219,25 @@
   // 텍스트 변경 감지
   watch(inputText, (newValue) => {
     const updatedValue = { role: currentRole.value, context: newValue }
-    emit('update:modelValue', updatedValue)
 
-    if (props.id) {
-      emit('node-data-changed', { id: props.id, data: updatedValue })
+    // 이벤트 핸들러 가져오기
+    const eventHandlers = getEventHandlers()
+
+    // data에 정의된 이벤트 핸들러가 있으면 사용
+    if (eventHandlers.onUpdateModelValue) {
+      eventHandlers.onUpdateModelValue(updatedValue)
+    }
+
+    // VueFlow 노드 ID 사용 (data.id 우선, 없으면 props.id)
+    const nodeId = props.data?.id || props.id
+    if (nodeId && eventHandlers.onNodeDataChanged) {
+      eventHandlers.onNodeDataChanged({ id: nodeId, data: updatedValue })
+    }
+
+    // fallback으로 emit도 실행
+    emit('update:modelValue', updatedValue)
+    if (nodeId) {
+      emit('node-data-changed', { id: nodeId, data: updatedValue })
     }
   })
 
