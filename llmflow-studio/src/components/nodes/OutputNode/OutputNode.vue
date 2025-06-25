@@ -48,7 +48,7 @@
   } from 'vue'
   import styles from './/OutputNode.module.css'
   import nodeExpandedButtonIcon from '@/assets/icons/nodes/nodeExpandedButtonIcon.svg'
-  import { Handle } from '@vue-flow/core'
+  import { Handle, useVueFlow } from '@vue-flow/core'
   import AppIcon from '@/components/AppIcon.vue'
 
   const props = defineProps({
@@ -61,6 +61,8 @@
       default: ''
     }
   })
+
+  const { nodes, edges } = useVueFlow()
 
   const emit = defineEmits(['update:modelValue', 'node-data-changed'])
 
@@ -131,16 +133,65 @@
   })
 
   const formattedResponse = computed(() => {
+    // 연결된 PromptNode의 데이터를 찾기
+    const connectedPromptNodes = []
+
+    if (edges.value && nodes.value) {
+      // 현재 노드로 들어오는 엣지 찾기
+      const incomingEdges = edges.value.filter(
+        (edge) => edge.target === props.id
+      )
+
+      // 각 들어오는 엣지의 소스 노드 중 PromptNode 찾기
+      incomingEdges.forEach((edge) => {
+        const sourceNode = nodes.value.find((node) => node.id === edge.source)
+        if (sourceNode && sourceNode.type === 'prompt_node') {
+          connectedPromptNodes.push({
+            id: sourceNode.id,
+            data: sourceNode.data,
+            props: {
+              modelValue: sourceNode.data?.modelValue || {
+                role: 'system',
+                context: ''
+              },
+              id: sourceNode.id
+            }
+          })
+        }
+      })
+    }
+
+    // PromptNode의 props 정보를 포맷팅해서 표시
+    if (connectedPromptNodes.length > 0) {
+      const promptData = {
+        connectedPromptNodes: connectedPromptNodes.map((node) => ({
+          nodeId: node.id,
+          defineProps: {
+            modelValue: {
+              type: 'Object',
+              default: '() => ({ role: "system", context: "" })',
+              currentValue: node.props.modelValue
+            },
+            id: {
+              type: 'String',
+              default: '""',
+              currentValue: node.props.id
+            }
+          }
+        }))
+      }
+      return JSON.stringify(promptData, null, 2)
+    }
+
+    // 연결된 PromptNode가 없으면 기본 context 표시
     if (props.modelValue.context == null) return ''
     try {
-      // context가 문자열이면 파싱 후 포맷팅, 아니면 그대로 포맷팅
       const obj =
         typeof props.modelValue.context === 'string'
           ? JSON.parse(props.modelValue.context)
           : props.modelValue.context
       return JSON.stringify(obj, null, 4)
     } catch (e) {
-      // 파싱 실패 시 원본 문자열 반환
       return String(props.modelValue.context)
     }
   })
